@@ -1,6 +1,7 @@
 """
 Módulo principal da blockchain.
 """
+import json
 from datetime import datetime
 from typing import List, Optional
 from .block import Block
@@ -17,12 +18,14 @@ class Blockchain:
         Inicializa a blockchain com o bloco gênesis.
         """
         self.chain: List[Block] = []
-        self.difficulty = 2  # Dificuldade da mineração
+        self.difficulty = 1  # Dificuldade reduzida para testes mais rápidos
         self.pending_transactions: List[Transaction] = []
         self.mining_reward = 10  # Recompensa por minerar um bloco
         
         # Cria o bloco gênesis
         self.create_genesis_block()
+        print("✅ Blockchain inicializada com sucesso!")
+        print(f"📦 Bloco gênesis criado (Hash: {self.chain[0].hash[:16]}...)")
     
     def create_genesis_block(self) -> None:
         """
@@ -32,6 +35,62 @@ class Blockchain:
         genesis_block = Block(0, [genesis_transaction], "0")
         genesis_block.mine_block(self.difficulty)
         self.chain.append(genesis_block)
+    
+    def print_blockchain(self) -> None:
+        """
+        Imprime a blockchain de forma organizada.
+        """
+        print("\n" + "="*60)
+        print("🔗 BLOCKCHAIN COMPLETA")
+        print("="*60)
+        
+        for i, block in enumerate(self.chain):
+            print(f"\n📦 BLOCO {i}")
+            print(f"   Hash: {block.hash}")
+            print(f"   Hash Anterior: {block.previous_hash}")
+            print(f"   Timestamp: {block.timestamp.strftime('%Y-%m-%d %H:%M:%S')}")
+            print(f"   Nonce: {block.nonce}")
+            print(f"   Transações: {len(block.transactions)}")
+            
+            for j, tx in enumerate(block.transactions):
+                if tx.sender == "Genesis":
+                    print(f"     {j+1}. 🎯 Bloco Gênesis")
+                elif tx.sender is None:
+                    print(f"     {j+1}. 💰 Recompensa → {tx.recipient}: {tx.amount}")
+                else:
+                    print(f"     {j+1}. 💸 {tx.sender} → {tx.recipient}: {tx.amount}")
+        
+        print(f"\n📊 ESTATÍSTICAS:")
+        print(f"   Total de blocos: {len(self.chain)}")
+        print(f"   Transações pendentes: {len(self.pending_transactions)}")
+        print(f"   Dificuldade: {self.difficulty}")
+        print(f"   Recompensa de mineração: {self.mining_reward}")
+        print("="*60)
+    
+    def print_balances(self) -> None:
+        """
+        Imprime os saldos de todos os endereços.
+        """
+        addresses = set()
+        
+        # Coleta todos os endereços únicos
+        for block in self.chain:
+            for tx in block.transactions:
+                if tx.sender and tx.sender != "Genesis":
+                    addresses.add(tx.sender)
+                if tx.recipient and tx.recipient != "Genesis":
+                    addresses.add(tx.recipient)
+        
+        print("\n" + "="*40)
+        print("💰 SALDOS DOS ENDEREÇOS")
+        print("="*40)
+        
+        for address in sorted(addresses):
+            balance = self.get_balance(address)
+            emoji = "💚" if balance > 0 else "❌" if balance < 0 else "⚪"
+            print(f"{emoji} {address}: {balance}")
+        
+        print("="*40)
     
     def get_latest_block(self) -> Block:
         """
