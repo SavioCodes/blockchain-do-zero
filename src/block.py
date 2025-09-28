@@ -1,4 +1,3 @@
-
 """
 Módulo para representar blocos na blockchain.
 """
@@ -57,20 +56,26 @@ class Block:
         """
         target = "0" * difficulty
         
-        print(f"Minerando bloco {self.index}...")
+        print(f"⛏️  Minerando bloco {self.index}... (Dificuldade: {difficulty})")
         start_time = datetime.now()
         
         while self.hash[:difficulty] != target:
             self.nonce += 1
             self.hash = self.calculate_hash()
+            
+            # Mostra progresso a cada 10000 tentativas
+            if self.nonce % 10000 == 0:
+                print(f"   Tentativa {self.nonce}... (Hash atual: {self.hash[:16]}...)")
         
         end_time = datetime.now()
         mining_time = (end_time - start_time).total_seconds()
         
-        print(f"Bloco {self.index} minerado em {mining_time:.2f}s!")
-        print(f"Hash: {self.hash}")
-        print(f"Nonce: {self.nonce}")
-        print("-" * 50)
+        print(f"✅ Bloco {self.index} minerado com sucesso!")
+        print(f"   ⏱️  Tempo: {mining_time:.2f}s")
+        print(f"   🔑 Hash: {self.hash}")
+        print(f"   🎲 Nonce: {self.nonce}")
+        print(f"   📦 Transações: {len(self.transactions)}")
+        print("   " + "-" * 50)
     
     def is_valid(self) -> bool:
         """
