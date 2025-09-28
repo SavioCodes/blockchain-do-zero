@@ -101,6 +101,30 @@ python run.py
 
 A API estará disponível em: `http://localhost:5000`
 
+### 🎯 Modo Fácil - Interface CLI
+
+Para usar a blockchain de forma mais simples, use a interface de linha de comando:
+
+```bash
+# Em um terminal, inicie a API:
+python run.py
+
+# Em outro terminal, use a CLI:
+python blockchain_cli.py
+```
+
+### 🚀 Exemplo Rápido
+
+Execute o exemplo prático completo:
+
+```bash
+# Terminal 1: API
+python run.py
+
+# Terminal 2: Exemplo
+python exemplo_simples.py
+```
+
 ### Executando os Testes
 
 ```bash
@@ -118,6 +142,7 @@ pytest --cov=src
 
 | Método | Endpoint | Descrição |
 |--------|----------|-----------|
+| `GET` | `/` | Página inicial com instruções |
 | `GET` | `/blockchain` | Retorna toda a blockchain |
 | `GET` | `/blocks/<index>` | Retorna um bloco específico |
 | `GET` | `/transactions` | Lista todas as transações |
@@ -126,32 +151,49 @@ pytest --cov=src
 | `GET` | `/balance/<address>` | Consulta saldo de endereço |
 | `GET` | `/validate` | Valida a blockchain |
 | `GET` | `/stats` | Estatísticas da blockchain |
+| `GET` | `/debug/print` | Imprime blockchain no terminal |
+
+## 🎮 Formas de Usar
+
+### 1. Interface CLI (Mais Fácil)
+```bash
+python blockchain_cli.py
+```
+
+### 2. Exemplo Automático
+```bash
+python exemplo_simples.py
+```
+
+### 3. Comandos curl (Manual)
+```bash
+curl -X GET http://localhost:5000/
+```
 
 ## 💡 Exemplos de Uso
 
-### 1. Consultando a Blockchain
+### 🌐 Acessando a API
+
+Primeiro, acesse a página inicial:
 
 ```bash
-curl -X GET http://localhost:5000/blockchain
+curl -X GET http://localhost:5000/
 ```
 
 **Resposta:**
 ```json
 {
-  "chain": [
-    {
-      "index": 0,
-      "timestamp": "2024-01-01T12:00:00",
-      "transactions": [...],
-      "previous_hash": "0",
-      "hash": "0012abc...",
-      "nonce": 1234
-    }
-  ],
-  "difficulty": 2,
-  "pending_transactions": [],
-  "mining_reward": 10
+  "message": "🔗 Blockchain do Zero - API",
+  "author": "Sávio - https://github.com/SavioCodes",
+  "endpoints": {...},
+  "example_transaction": {...}
 }
+```
+
+### 1. Consultando a Blockchain
+
+```bash
+curl -X GET http://localhost:5000/blockchain
 ```
 
 ### 2. Adicionando uma Transação
@@ -166,20 +208,6 @@ curl -X POST http://localhost:5000/transactions \
   }'
 ```
 
-**Resposta:**
-```json
-{
-  "message": "Transação adicionada com sucesso",
-  "transaction": {
-    "sender": "Alice",
-    "recipient": "Bob",
-    "amount": 50.0,
-    "timestamp": "2024-01-01T12:00:00"
-  },
-  "pending_transactions": 1
-}
-```
-
 ### 3. Minerando um Bloco
 
 ```bash
@@ -188,28 +216,15 @@ curl -X POST http://localhost:5000/mine \
   -d '{"miner_address": "Minerador1"}'
 ```
 
-**Saída no Terminal:**
+**Saída no Terminal da API:**
 ```
-Minerando bloco 1...
-Bloco 1 minerado em 2.34s!
-Hash: 00a1b2c3d4e5f6789012345678901234567890
-Nonce: 45672
---------------------------------------------------
-```
-
-**Resposta da API:**
-```json
-{
-  "message": "Bloco minerado com sucesso",
-  "block": {
-    "index": 1,
-    "timestamp": "2024-01-01T12:05:00",
-    "transactions": [...],
-    "hash": "00a1b2c3...",
-    "nonce": 45672
-  },
-  "miner_balance": 10.0
-}
+⛏️  Minerando bloco 1... (Dificuldade: 1)
+✅ Bloco 1 minerado com sucesso!
+   ⏱️  Tempo: 0.02s
+   🔑 Hash: 0a1b2c3d4e5f6789012345678901234567890
+   🎲 Nonce: 156
+   📦 Transações: 2
+   --------------------------------------------------
 ```
 
 ### 4. Consultando Saldo
@@ -218,27 +233,19 @@ Nonce: 45672
 curl -X GET http://localhost:5000/balance/Alice
 ```
 
-**Resposta:**
-```json
-{
-  "address": "Alice",
-  "balance": -50.0
-}
-```
-
 ### 5. Validando a Blockchain
 
 ```bash
 curl -X GET http://localhost:5000/validate
 ```
 
-**Resposta:**
-```json
-{
-  "is_valid": true,
-  "message": "Blockchain válida"
-}
+### 6. Visualização Completa
+
+```bash
+curl -X GET http://localhost:5000/debug/print
 ```
+
+Isso imprimirá no terminal da API uma visualização completa e organizada da blockchain.
 
 ## 🔧 Personalização
 
@@ -247,7 +254,7 @@ curl -X GET http://localhost:5000/validate
 No arquivo `src/blockchain.py`, altere o valor:
 
 ```python
-self.difficulty = 4  # Aumenta a dificuldade (mais zeros no hash)
+self.difficulty = 2  # Aumenta a dificuldade (mais zeros no hash)
 ```
 
 ### Modificando a Recompensa
@@ -256,9 +263,27 @@ self.difficulty = 4  # Aumenta a dificuldade (mais zeros no hash)
 self.mining_reward = 25  # Recompensa de 25 por bloco minerado
 ```
 
-## 🧪 Exemplo Completo de Teste
+## 🧪 Teste Completo Automático
 
-Execute este script para testar toda a funcionalidade:
+### Opção 1: Exemplo Automático
+```bash
+# Terminal 1: Inicie a API
+python run.py
+
+# Terminal 2: Execute o exemplo
+python exemplo_simples.py
+```
+
+### Opção 2: Interface Interativa
+```bash
+# Terminal 1: Inicie a API
+python run.py
+
+# Terminal 2: Use a CLI
+python blockchain_cli.py
+```
+
+### Opção 3: Comandos Manuais
 
 ```bash
 # Terminal 1: Inicie a API
@@ -281,6 +306,9 @@ curl -X GET http://localhost:5000/balance/Minerador1 # 10.0 (recompensa)
 
 # Validar blockchain
 curl -X GET http://localhost:5000/validate
+
+# Ver visualização completa
+curl -X GET http://localhost:5000/debug/print
 ```
 
 ## 📊 Capturas de Tela
@@ -293,17 +321,41 @@ curl -X GET http://localhost:5000/validate
 📖 Documentação disponível no README.md
 --------------------------------------------------
 
-Minerando bloco 1...
-Bloco 1 minerado em 1.23s!
-Hash: 0087a2b1c4f892d3e5a7b9c2f1e4d8a6b3c9f2e5
-Nonce: 12847
---------------------------------------------------
+⛏️  Minerando bloco 1... (Dificuldade: 1)
+✅ Bloco 1 minerado com sucesso!
+   ⏱️  Tempo: 0.05s
+   🔑 Hash: 0a87b2c1d4f892e3f5a7b9c2f1e4d8a6b3c9f2e5
+   🎲 Nonce: 234
+   📦 Transações: 2
+   --------------------------------------------------
 
-Minerando bloco 2...
-Bloco 2 minerado em 3.45s!
-Hash: 00f9e8d7c6b5a4938271605f4e3d2c1b0a998877
-Nonce: 67234
---------------------------------------------------
+⛏️  Minerando bloco 2... (Dificuldade: 1)
+✅ Bloco 2 minerado com sucesso!
+   ⏱️  Tempo: 0.12s
+   🔑 Hash: 0f9e8d7c6b5a4938271605f4e3d2c1b0a998877
+   🎲 Nonce: 891
+   📦 Transações: 3
+   --------------------------------------------------
+```
+
+### Interface CLI
+```
+🔗 BLOCKCHAIN DO ZERO - CLI
+📚 Desenvolvido por Sávio - https://github.com/SavioCodes
+============================================================
+
+📋 OPÇÕES DISPONÍVEIS:
+1. 📖 Ver blockchain completa
+2. 📦 Ver bloco específico
+3. 💸 Adicionar transação
+4. ⛏️  Minerar bloco
+5. 💰 Ver saldo
+6. ✅ Validar blockchain
+7. 📊 Ver estatísticas
+8. 🖨️  Imprimir blockchain (debug)
+9. ❌ Sair
+
+🔢 Escolha uma opção (1-9):
 ```
 
 ## 🤝 Como Contribuir
@@ -329,16 +381,19 @@ Nonce: 67234
 R: Alice começa sem saldo e faz uma transação de 100. Por isso fica com -100. Em uma blockchain real, seria verificado se há saldo suficiente.
 
 **P: Como funciona a mineração?**
-R: O algoritmo tenta encontrar um hash que comece com zeros (definido pela dificuldade). Quanto mais zeros, mais difícil e demorado.
+R: O algoritmo tenta encontrar um hash que comece com zeros (definido pela dificuldade). A dificuldade padrão é 1 para testes rápidos.
 
 **P: Posso usar em produção?**
 R: Este é um projeto educativo. Para produção, considere frameworks como Hyperledger ou Ethereum.
+
+**P: Como usar de forma mais fácil?**
+R: Use `python blockchain_cli.py` para uma interface amigável ou `python exemplo_simples.py` para ver tudo funcionando automaticamente.
 
 ## 🐛 Problemas Conhecidos
 
 - Não há verificação de saldo antes das transações
 - Não há persistência (dados são perdidos ao reiniciar)
-- Mineração pode ser lenta com alta dificuldade
+- Dificuldade baixa (1) para facilitar testes
 
 ## 📄 Licença
 
